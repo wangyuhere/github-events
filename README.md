@@ -3,6 +3,8 @@
 ## Introduction
 Play with Github public events data.
 
+Also try React.js with ES6 + gulp.
+
 [http://wangyuhere.github.io/github-events/](http://wangyuhere.github.io/github-events/)
 
 Data is fetched from [Github Archive](https://www.githubarchive.org/)

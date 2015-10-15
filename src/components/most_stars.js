@@ -23,7 +23,7 @@ export default class MostStars extends React.Component {
     new Pikaday({
       field: document.getElementById("date-picker"),
       defaultDate: _this.state.date,
-      minDate: new Date("2015-10-10"),
+      minDate: new Date("2015-10-01"),
       maxDate: moment().subtract(1, "days").toDate(),
       onSelect: _this.handleDateSelected
     });
