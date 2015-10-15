@@ -1,7 +1,7 @@
 import gulp from "gulp";
 import gutil from "gulp-util";
 import sass from "gulp-sass";
-import deploy from "gulp-gh-pages";
+import ghPages from "gulp-gh-pages";
 import browserify from "browserify";
 import babelify from "babelify";
 import source from "vinyl-source-stream";
@@ -67,8 +67,8 @@ gulp.task("serve", ["build"],  () => {
   gulp.watch("public/*.html").on("change", browser.reload);
 });
 
-gulp.task("gh-pages", ["build"], () => {
+gulp.task("deploy", ["build"], () => {
   gulp.src("./public/**/*")
-  .pipe(deploy());
+  .pipe(ghPages({force: true}));
 });
 
