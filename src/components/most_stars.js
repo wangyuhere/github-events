@@ -31,7 +31,7 @@ export default class MostStars extends React.Component {
 
   fetchData() {
     request
-    .get(`/data/most_stars/${this.state.date}.json`)
+    .get(`data/most_stars/${this.state.date}.json`)
     .end((err, res) => {
       if (res.body == null) {
         return;
