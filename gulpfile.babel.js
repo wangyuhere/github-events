@@ -68,7 +68,7 @@ gulp.task("serve", ["build"],  () => {
 });
 
 gulp.task("deploy", ["build"], () => {
-  gulp.src("./public/**/*")
-  .pipe(ghPages({force: true}));
+  return gulp.src("./public/**/*.*")
+  .pipe(ghPages());
 });
 
