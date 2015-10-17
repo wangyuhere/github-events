@@ -1,4 +1,5 @@
 require "json"
+require "fileutils"
 require_relative "./base"
 
 module Runners
@@ -13,8 +14,16 @@ module Runners
     end
 
     def run
+      create_dirs
       download unless File.exists?(file)
       generate_json
+    end
+
+    def create_dirs
+      [file, json_file].each do |f|
+        dirname = File.dirname(f)
+        FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
+      end
     end
 
     def download
