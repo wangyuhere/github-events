@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 import request from "superagent"
-import {ListGroup, ListGroupItem} from "react-bootstrap";
+import {ListGroup, ListGroupItem} from "react-bootstrap"
 import moment from "moment"
-import Pikaday from "pikaday"
-import Repository from "./repository"
+import DatePicker from "./date_picker"
+import ReposList from "./repos_list"
 
 export default class MostStars extends React.Component {
 
@@ -18,15 +18,6 @@ export default class MostStars extends React.Component {
 
   componentDidMount() {
     this.fetchData();
-    let _this = this;
-
-    new Pikaday({
-      field: document.getElementById("date-picker"),
-      defaultDate: _this.state.date,
-      minDate: new Date("2015-10-01"),
-      maxDate: moment().subtract(1, "days").toDate(),
-      onSelect: _this.handleDateSelected
-    });
   }
 
   fetchData() {
@@ -49,33 +40,23 @@ export default class MostStars extends React.Component {
   }
 
   render() {
-    let repos = this.state.repos.map((repo) => {
-      return (
-        <ListGroupItem key={repo.id}>
-          <Repository repo={repo} />
-        </ListGroupItem>
-      );
-    });
+    let minDate = new Date("2015-10-01");
+    let maxDate = moment().subtract(1, "days").toDate();
 
     return (
       <div>
         <h2>Most starred repos by day</h2>
-        <form className="form-inline pull-right">
-          <div className="form-group">
-            <label for="date-picker">Choose Date</label>
-            <input type="text"
-              id="date-picker"
-              value={this.state.date}
-              className="form-control" />
-          </div>
-        </form>
+        <DatePicker
+          id="date-picker"
+          minDate={minDate}
+          maxDate={maxDate}
+          date={this.state.date}
+          handleDateSelected={this.handleDateSelected}/>
         <div className="clearfix" />
         <p/>
-        <ListGroup>
-          {repos}
-        </ListGroup>
+        <ReposList repos={this.state.repos} />
       </div>
     )
-  };
+  }
 }
 

@@ -30,7 +30,7 @@ gulp.task("bundle", () => {
     bundle.external(lib)
   });
 
-  return bundle.transform(babelify)
+  bundle.transform(babelify)
   .bundle()
   .on("error", gutil.log)
   .pipe(source("bundle.js"))
@@ -38,7 +38,7 @@ gulp.task("bundle", () => {
 });
 
 gulp.task("vendor", () => {
-  return browserify({
+  browserify({
     require: libs,
   })
   .bundle()
@@ -48,13 +48,13 @@ gulp.task("vendor", () => {
 });
 
 gulp.task("sass", () => {
-  return gulp.src("./src/styles/main.scss")
+  gulp.src("./src/styles/main.scss")
   .pipe(sass({includePaths: ["./node_modules"]}).on("error", gutil.log))
   .pipe(gulp.dest("./public"));
 });
 
 gulp.task("build", ["sass", "vendor", "bundle"], () => {
-  return gulp.src("./public/**/*")
+  gulp.src("./public/**/*")
   .pipe(gulp.dest("./dist"));
 });
 
