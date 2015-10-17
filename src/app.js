@@ -1,7 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Navigation from "./components/navigation"
-import MostStars from "./components/most_stars"
+import createBrowserHistory from "history/lib/createBrowserHistory"
+import { Router, Route, IndexRoute } from "react-router";
+import Navigation from "./components/navigation";
+import MostStars from "./components/most_stars";
 
 class App extends React.Component {
   render() {
@@ -9,14 +11,22 @@ class App extends React.Component {
       <div>
         <Navigation />
         <div className="container">
-          <MostStars />
+          {this.props.children}
         </div>
       </div>
     );
   }
 }
 
+let history = createBrowserHistory();
+
 ReactDOM.render(
-  <App />,
+  <Router history={history}>
+    <Route path="/" component={App}>
+      <IndexRoute component={MostStars} />
+      <Route path="most_stars(/:date)" component={MostStars} />
+    </Route>
+  </Router>,
   document.getElementById("content")
 );
+
