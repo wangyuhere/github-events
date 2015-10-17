@@ -7,9 +7,11 @@ import source from "vinyl-source-stream";
 import browserSync from "browser-sync";
 
 const libs = [
+  "history",
   "react",
   "react-dom",
   "react-bootstrap",
+  "react-router",
   "superagent",
   "moment",
   "pikaday"
