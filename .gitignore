@@ -3,4 +3,6 @@
 .env
 /public/*.js
 /public/*.css
+/dist
+/public/data/**/*.json
 

@@ -1,7 +1,6 @@
 import gulp from "gulp";
 import gutil from "gulp-util";
 import sass from "gulp-sass";
-import ghPages from "gulp-gh-pages";
 import browserify from "browserify";
 import babelify from "babelify";
 import source from "vinyl-source-stream";
@@ -29,7 +28,7 @@ gulp.task("bundle", () => {
     bundle.external(lib)
   });
 
-  bundle.transform(babelify)
+  return bundle.transform(babelify)
   .bundle()
   .on("error", gutil.log)
   .pipe(source("bundle.js"))
@@ -37,7 +36,7 @@ gulp.task("bundle", () => {
 });
 
 gulp.task("vendor", () => {
-  browserify({
+  return browserify({
     require: libs,
   })
   .bundle()
@@ -47,12 +46,15 @@ gulp.task("vendor", () => {
 });
 
 gulp.task("sass", () => {
-  gulp.src("./src/styles/main.scss")
+  return gulp.src("./src/styles/main.scss")
   .pipe(sass({includePaths: ["./node_modules"]}).on("error", gutil.log))
   .pipe(gulp.dest("./public"));
 });
 
-gulp.task("build", ["sass", "vendor", "bundle"]);
+gulp.task("build", ["sass", "vendor", "bundle"], () => {
+  return gulp.src("./public/**/*")
+  .pipe(gulp.dest("./dist"));
+});
 
 gulp.task("serve", ["build"],  () => {
   browser.init({
@@ -65,10 +67,5 @@ gulp.task("serve", ["build"],  () => {
   gulp.watch(["src/**/*.js"], { interval: 500 }, ["bundle"]);
   gulp.watch(["node_modules/**/*.js"], { interval: 500 }, ["vendor"]);
   gulp.watch("public/*.html").on("change", browser.reload);
-});
-
-gulp.task("deploy", ["build"], () => {
-  return gulp.src("./public/**/*.*")
-  .pipe(ghPages());
 });
 

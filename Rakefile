@@ -15,3 +15,11 @@ task :run do
   Runners.run("MostStarsByDay", date: date)
 end
 
+desc "deploy"
+task :deploy do
+  system("rm -rf ./dist")
+  system("git clone -b gh-pages git@github.com:wangyuhere/github-events.git dist")
+  system("gulp build")
+  system("cd dist && git add . && git commit -m 'updated' && git push")
+end
+
