@@ -22,7 +22,7 @@ export default class DatePicker extends React.Component {
           <label htmlFor={this.props.id}>Choose Date</label>
           <input type="text"
             id={this.props.id}
-            defaultValue={this.props.date}
+            value={this.props.date}
             className="form-control" />
         </div>
       </form>

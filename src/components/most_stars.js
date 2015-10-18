@@ -1,28 +1,41 @@
 import React from "react"
 import request from "superagent"
-import {ListGroup, ListGroupItem} from "react-bootstrap"
 import moment from "moment"
+import connectHistory from "../connect_history"
 import DatePicker from "./date_picker"
 import ReposList from "./repos_list"
 
-export default class MostStars extends React.Component {
+class MostStars extends React.Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
-      repos: [],
-      date: "2015-10-12"
+      repos: []
     };
     this.handleDateSelected = this.handleDateSelected.bind(this);
+  }
+
+  curDate() {
+    return this.props.params.date || "2015-10-12"
   }
 
   componentDidMount() {
     this.fetchData();
   }
 
+  componentDidUpdate (prevProps) {
+    let oldDate = prevProps.params.date;
+    let newDate = this.props.params.date;
+
+    if (newDate !== oldDate) {
+      this.fetchData();
+    }
+  }
+
   fetchData() {
     request
-    .get(`data/most_stars/${this.state.date}.json`)
+    .get(`data/most_stars/${this.curDate()}.json`)
     .end((err, res) => {
       if (res.body == null) {
         return;
@@ -35,8 +48,8 @@ export default class MostStars extends React.Component {
   }
 
   handleDateSelected(date) {
-    this.setState({ date: moment(date).format("YYYY-MM-DD") });
-    this.fetchData();
+    let dateStr = moment(date).format("YYYY-MM-DD")
+    this.props.history.pushState(null, `/most_stars/${dateStr}`);
   }
 
   render() {
@@ -50,7 +63,7 @@ export default class MostStars extends React.Component {
           id="date-picker"
           minDate={minDate}
           maxDate={maxDate}
-          date={this.state.date}
+          date={this.curDate()}
           handleDateSelected={this.handleDateSelected}/>
         <div className="clearfix" />
         <p/>
@@ -59,4 +72,6 @@ export default class MostStars extends React.Component {
     )
   }
 }
+
+export default connectHistory(MostStars)
 
