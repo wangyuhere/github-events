@@ -17,7 +17,7 @@ end
 
 desc "update"
 task :update do
-  system("git pull --rebase")
+  system("git pull --rebase && npm install && bundle install")
 end
 
 desc "deploy"
