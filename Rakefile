@@ -15,6 +15,11 @@ task :run do
   Runners.run("MostStarsByDay", date: date)
 end
 
+desc "update"
+task :update do
+  system("git pull --rebase")
+end
+
 desc "deploy"
 task :deploy do
   system("rm -rf ./dist")
