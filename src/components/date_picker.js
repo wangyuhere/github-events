@@ -17,7 +17,7 @@ export default class DatePicker extends React.Component {
 
   render() {
     return (
-      <form className="form-inline pull-right">
+      <form className="form-inline">
         <div className="form-group">
           <label htmlFor={this.props.id}>Choose Date</label>
           <input type="text"

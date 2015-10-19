@@ -2,17 +2,20 @@ import React from "react";
 
 export default class Repository extends React.Component {
   render() {
+    let repo = this.props.repo;
+
     return (
       <div>
-        <h3><a href={this.props.repo.html_url}>{this.props.repo.full_name}</a></h3>
+        <h3><a href={repo.html_url}>{repo.full_name}</a></h3>
         <p className="lead">
-          {this.props.repo.description}
+          {repo.description}
         </p>
         <p>
           <span className="glyphicon glyphicon-star"></span>
-          <span> {this.props.repo.daily_watchers_count}</span>
-          <span>/{this.props.repo.watchers_count}</span>
-          <span className="pull-right">{this.props.repo.language}</span>
+          <span> {repo.daily_watchers_count}</span>
+          <span>/{repo.watchers_count}</span>
+          <span> ({repo.percentage.toFixed(2)}%)</span>
+          <span className="pull-right">{repo.language}</span>
         </p>
       </div>
     )
