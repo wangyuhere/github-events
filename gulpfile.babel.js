@@ -34,7 +34,8 @@ gulp.task("bundle", () => {
   .bundle()
   .on("error", gutil.log)
   .pipe(source("bundle.js"))
-  .pipe(gulp.dest("./public"));
+  .pipe(gulp.dest("./public"))
+  .pipe(browser.stream());
 });
 
 gulp.task("vendor", () => {
