@@ -1,3 +1,5 @@
+env :PATH, ENV["PATH"]
+
 every 1.day, at: "1am" do
   rake "update", output: "./log/update.log"
 end
