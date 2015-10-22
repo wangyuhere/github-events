@@ -20,7 +20,7 @@ class MostStars extends React.Component {
   }
 
   curDate() {
-    return this.props.params.date || "2015-10-12"
+    return this.props.params.date || moment().subtract(2, "days").format("YYYY-MM-DD");
   }
 
   componentDidMount() {
