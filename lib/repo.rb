@@ -1,12 +1,13 @@
 class Repo
-  attr_accessor :id, :name, :url
+  attr_accessor :id, :name
 
   def self.from_json(json)
-    Repo.new.tap do |r|
-      r.id = json["id"]
-      r.name = json["name"]
-      r.url = json["url"]
-    end
+    Repo.new json["id"], json["name"]
+  end
+
+  def initialize(id, name)
+    @id = id
+    @name = name
   end
 
   def eql?(other)

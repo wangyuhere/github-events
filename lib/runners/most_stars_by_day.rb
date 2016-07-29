@@ -28,8 +28,31 @@ module Runners
 
     def download
       repos = Hash.new(0)
-      ::Parser.new(date: date, event_type: event_type).parse do |event|
-        repos[event.repo] += 1
+
+      File.open(tmp_file, "w") do |f|
+        ::Parser.new(date: date, event_type: event_type).parse do |event|
+          f.puts "#{event.repo.id} #{event.repo.name}"
+        end
+      end
+
+      system("sort #{tmp_file} -o #{tmp_file}") or raise "can not sort #{tmp_file}"
+      repos = {}
+      File.open(tmp_file, "r") do |f|
+        prev_repo = nil
+        count = 0
+        f.each_line do |line|
+          id, name = line.split(/\s+/)
+          if prev_repo && prev_repo.id != id
+            repos[Repo.new(id, name)] = count if count > MIN_STARS / 2
+            count = 0
+          end
+
+          count += 1
+          prev_repo = Repo.new id, name
+        end
+        if count > MIN_STARS / 2
+          repos[prev_repo] = count
+        end
       end
 
       File.open(file, "w") do |f|
@@ -77,6 +100,10 @@ module Runners
 
     def file
       full_path("tmp/#{event_type}-#{date}.txt")
+    end
+
+    def tmp_file
+      full_path("tmp/daily_watch_events.txt")
     end
 
     def json_file
