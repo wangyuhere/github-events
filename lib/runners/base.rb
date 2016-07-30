@@ -1,5 +1,4 @@
 require "logger"
-require "parser"
 
 module Runners
   class Base

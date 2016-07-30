@@ -1,5 +1,3 @@
-require "parser"
-
 module Runners
   def self.run(name, args)
     const_get(name).new(args).run

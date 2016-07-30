@@ -27,46 +27,19 @@ module Runners
     end
 
     def download
-      repos = Hash.new(0)
-
-      File.open(tmp_file, "w") do |f|
-        ::Parser.new(date: date, event_type: event_type).parse do |event|
-          f.puts "#{event.repo.id} #{event.repo.name}"
-        end
+      FileUtils.rm_f tmp_file
+      (0..23).each do |hour|
+        url = "http://data.githubarchive.org/#{date}-#{hour}.json.gz"
+        system("curl -s #{url} | zgrep 'WatchEvent' | jq -r -c '. | .repo.name' >> #{tmp_file}") or raise "can not download #{url}"
       end
-
-      system("sort #{tmp_file} -o #{tmp_file}") or raise "can not sort #{tmp_file}"
-      repos = {}
-      File.open(tmp_file, "r") do |f|
-        prev_repo = nil
-        count = 0
-        f.each_line do |line|
-          id, name = line.split(/\s+/)
-          if prev_repo && prev_repo.id != id
-            repos[Repo.new(id, name)] = count if count > MIN_STARS / 2
-            count = 0
-          end
-
-          count += 1
-          prev_repo = Repo.new id, name
-        end
-        if count > MIN_STARS / 2
-          repos[prev_repo] = count
-        end
-      end
-
-      File.open(file, "w") do |f|
-        repos.sort_by(&:last).reverse.each do |repo, count|
-          f.puts "#{repo.id} #{repo.name} #{count}"
-        end
-      end
+      system("sort -n #{tmp_file} | uniq -c | awk '{if($1>#{MIN_STARS/2})print $1, $2}' | sort -n -r > #{file}") or raise "can not sort and uniq the events"
     end
 
     def generate_json
       jsons = []
       File.open(file, "r") do |f|
         f.each_line do |line|
-          _, name, count = line.split(/\s+/)
+          count, name = line.split(/\s+/)
           break if count.to_i < MIN_STARS
           begin
             repo = Octokit.repo name
