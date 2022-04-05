@@ -21,7 +21,7 @@ GEM
     slop (3.6.0)
     whenever (0.9.4)
       chronic (>= 0.6.3)
-    yajl-ruby (1.2.1)
+    yajl-ruby (1.4.2)
 
 PLATFORMS
   ruby
